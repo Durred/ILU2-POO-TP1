@@ -1,6 +1,5 @@
 package villagegaulois;
 
-import java.util.Iterator;
 
 import personnages.Chef;
 import personnages.Gaulois;
@@ -37,14 +36,16 @@ public class Village {
 
 		private Etal[] trouverEtals(String produit) {
 			int nbEtal = 0;
+			System.out.println(produit);
 			for (int i = 0; i < etals.length; i++) {
+				System.out.println(produit);
 				if (etals[i].contientProduit(produit)) {
 					nbEtal++;
 				}
 			}
 			Etal[] resEtal = new Etal[nbEtal];
 			for (int i = 0, j = 0; i < etals.length; i++) {
-				if (etals[i].contientProduit(produit)) {
+				if (etals[i].isEtalOccupe() && etals[i].contientProduit(produit)) {
 					resEtal[j] = etals[i];
 					j++;
 				}
@@ -129,7 +130,8 @@ public class Village {
 		message.append(vendeur.getNom() + " cherche un endroit ou vendre " + nbProduit + " " + produit + ".\n");
 		int numEtal = marche.trouverEtalLibre();
 		if (numEtal == -1) {
-			message.append("Toutes les étales sont occupées, le vendeur " + vendeur.getNom() + " devra revenir demain.\n");
+			message.append(
+					"Toutes les étales sont occupées, le vendeur " + vendeur.getNom() + " devra revenir demain.\n");
 		} else {
 			marche.utiliserEtal(numEtal, vendeur, produit, nbProduit);
 			message.append("Le vendeur " + vendeur.getNom() + " vend " + produit + " à l'étal n° " + numEtal + ".\n");
@@ -148,21 +150,21 @@ public class Village {
 		} else {
 			message.append("Les vendeurs qui proposent " + produit + " sont :\n");
 			for (int i = 0; i < etalsProduit.length; i++) {
-				message.append("- "+ etalsProduit[i].getVendeur().getNom() + "\n");
+				message.append("- " + etalsProduit[i].getVendeur().getNom() + "\n");
 			}
 		}
 		return message.toString();
 	}
-	
+
 	public Etal rechercherEtal(Gaulois vendeur) {
 		return marche.trouverVendeur(vendeur);
 	}
-	
+
 	public String partirVendeur(Gaulois vendeur) {
 		Etal etalVendeur = marche.trouverVendeur(vendeur);
 		return etalVendeur.libererEtal();
 	}
-	
+
 	public String afficherMarche() {
 		return marche.afficherMarche();
 	}
